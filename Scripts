@@ -1,0 +1,29 @@
+1. Install Packages 
+#!/bin/bash 
+sudo apt update && sudo apt install -y nginx 
+Purpose: Updates system package info and installs NGINX web server. 
+
+2. Monitor Disk Usage 
+#!/bin/bash 
+df -h > disk_usage_report.txt 
+Purpose: Saves disk space usage to a file for review later. 
+
+3. Backup Files 
+#!/bin/bash 
+tar -czf backup_$(date +%F).tar.gz /path/to/directory 
+Purpose: Compresses a directory into a .tar.gz backup file with the current date. 
+
+4. Jenkins Job Trigger 
+#!/bin/bash 
+curl -X POST http://jenkins.local/job/your-job-name/build \ --user your-user:your-api-token 
+Purpose: Triggers a Jenkins CI job remotely using a POST request and 
+authentication. 
+
+5. Docker Container Health Check 
+#!/bin/bash 
+if docker ps | grep -q my_container; then 
+echo "Container is running" 
+else 
+echo "Container is down" 
+fi 
+Purpose: Checks if a specific Docker container (my_container) is running
