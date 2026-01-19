@@ -70,4 +70,55 @@ docker container prune -f
 docker image prune -f 
 docker volume prune -f 
 Purpose: Frees disk space by removing unused Docker containers, images, and 
-volumes. 
+volumes.
+
+11. PostgreSQL Database Backup 
+#!/bin/bash 
+BACKUP_DIR="/backups" 
+DB_NAME="mydb" 
+USER="postgres" 
+mkdir -p $BACKUP_DIR 
+pg_dump -U $USER $DB_NAME > $BACKUP_DIR/${DB_NAME}_$(date 
++%F).sql 
+Purpose: Creates a daily backup of a PostgreSQL database.
+
+12. Kubernetes Pod Status Checker 
+#!/bin/bash 
+NAMESPACE="default" 
+kubectl get pods -n $NAMESPACE | grep -v Running 
+Purpose: Lists non-running pods in a Kubernetes namespace. 
+
+13. Jenkins Job Trigger with Token 
+#!/bin/bash 
+JENKINS_URL="http://jenkins.local" 
+JOB_NAME="my-job" 
+USER="your-user" 
+API_TOKEN="your-token" 
+curl -X POST "$JENKINS_URL/job/$JOB_NAME/build" --user 
+$USER:$API_TOKEN 
+Purpose: Triggers a Jenkins job using username + token for security. 
+
+14. Check Port Availability 
+#!/bin/bash 
+PORT=8080 
+if lsof -i:$PORT > /dev/null; then 
+echo "Port $PORT is in use." 
+else 
+echo "Port $PORT is free." 
+fi 
+Purpose: Checks if a specific port (like 8080) is being used by any process. 
+
+15. Simple CI Build Script 
+#!/bin/bash 
+echo "Starting build process..." 
+cd /home/ubuntu/app 
+git pull origin main 
+mvn clean install -DskipTests 
+if [ $? -eq 0 ]; then 
+echo "Build successful!" 
+else 
+echo "Build failed!" 
+exit 1 
+fi 
+Purpose: A basic CI build script that pulls code and builds a Java project using 
+Maven.
