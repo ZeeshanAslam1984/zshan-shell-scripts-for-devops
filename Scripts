@@ -122,3 +122,69 @@ exit 1
 fi 
 Purpose: A basic CI build script that pulls code and builds a Java project using 
 Maven.
+
+15. Simple CI Build Script 
+#!/bin/bash 
+echo "Starting build process..." 
+cd /home/ubuntu/app 
+git pull origin main 
+mvn clean install -DskipTests 
+if [ $? -eq 0 ]; then 
+echo "Build successful!" 
+else 
+echo "Build failed!" 
+exit 1 
+fi 
+Purpose: A basic CI build script that pulls code and builds a Java project using 
+Maven. 
+
+16. Kubernetes Rolling Restart 
+#!/bin/bash 
+DEPLOYMENT="myapp" 
+NAMESPACE="default" 
+kubectl rollout restart deployment $DEPLOYMENT -n $NAMESPACE 
+● Purpose: Triggers a rolling restart of a Kubernetes deployment. 
+● Use: Used to apply changes to a deployment (like new code) without 
+downtime. 
+
+17. Check Jenkins Job Status via API 
+#!/bin/bash 
+JOB_NAME="my-job" 
+USER="admin" 
+API_TOKEN="xxxxxx" 
+JENKINS_URL="http://jenkins.local" 
+curl -s --user $USER:$API_TOKEN 
+"$JENKINS_URL/job/$JOB_NAME/lastBuild/api/json" | jq '.result' 
+● Purpose: Fetches the last build status of a Jenkins job using the Jenkins API. 
+● Use: Helpful for monitoring Jenkins jobs programmatically. 
+
+18. Pull Latest Docker Image and Restart Container 
+#!/bin/bash 
+IMAGE="myrepo/myapp:latest" 
+CONTAINER="myapp" 
+docker pull $IMAGE 
+docker stop $CONTAINER 
+docker rm $CONTAINER 
+docker run -d --name $CONTAINER -p 80:80 $IMAGE 
+● Purpose: Pulls the latest Docker image, stops the existing container, 
+removes it, and then restarts the container with the updated image. 
+● Use: Ideal for CI/CD pipelines that require container updates. 
+
+19. Terraform Plan & Apply with Auto-Approval 
+#!/bin/bash 
+cd /path/to/terraform 
+terraform init 
+terraform plan -out=tfplan 
+terraform apply -auto-approve tfplan 
+● Purpose: Automates the process of running terraform plan and applying the 
+changes without manual approval. 
+● Use: Useful for environments that require continuous infrastructure 
+deployment
+
+20. Ansible Playbook Trigger 
+#!/bin/bash 
+ansible-playbook -i inventory.ini site.yml --limit web_servers 
+● Purpose: Executes an Ansible playbook on a set of hosts defined by 
+web_servers in the inventory file. 
+● Use: Automates configuration management tasks like provisioning or 
+deploying on specific servers. 
