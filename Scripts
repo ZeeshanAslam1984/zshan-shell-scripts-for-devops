@@ -239,3 +239,56 @@ done
 ● Purpose: Automatically clones a list of GitHub repositories from a specific 
 organization. 
 ● Use: Useful for setting up multiple repositories quickly. 
+
+26. Jenkins Agent Disk Usage Check 
+#!/bin/bash 
+AGENTS=("agent1" "agent2") 
+for AGENT in "${AGENTS[@]}" 
+do 
+ssh jenkins@$AGENT "df -h | grep '/$'" 
+done 
+● Purpose: Checks the disk usage on Jenkins agents and reports the root 
+filesystem usage. 
+● Use: Helpful for monitoring available disk space on Jenkins nodes. 
+
+27. Restart All Failed Systemd Services 
+#!/bin/bash 
+for SERVICE in $(systemctl --failed --no-legend | awk '{print $1}'); do 
+systemctl restart $SERVICE 
+done 
+● Purpose: Restarts all failed systemd services. 
+● Use: Ensures that any failed services on a Linux system are automatically 
+restarted. 
+
+28. Pull Docker Logs for the Last 1 Hour 
+#!/bin/bash 
+CONTAINER="myapp" 
+docker logs --since 1h $CONTAINER > logs_last_hour.txt 
+● Purpose: Pulls logs from a Docker container for the last 1 hour and saves 
+them to a file. 
+● Use: Useful for troubleshooting and monitoring container behavior over a 
+recent period. 
+
+29. Clean Old Docker Images (Keep Last 2) 
+#!/bin/bash 
+docker image prune -af --filter "until=24h" 
+docker images --filter=reference='myapp*' --format "{{.ID}}" | tail -n +3 | xargs 
+docker rmi -f 
+● Purpose: Removes old and unused Docker images, keeping only the most 
+recent ones. 
+● Use: Helps in cleaning up disk space by removing old Docker images that 
+are no longer needed. 
+
+30. Git Pre-Commit Hook for Code Format Check 
+#!/bin/bash 
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.py$') 
+for FILE in $FILES; do 
+if ! black --check "$FILE"; then 
+echo "Formatting error in $FILE. Run 'black $FILE'" 
+exit 1 
+fi 
+done 
+● Purpose: A pre-commit hook that checks if Python files are properly 
+formatted using the black formatter before committing. 
+● Use: Ensures that code follows formatting standards before it is committed 
+to the Git repository
