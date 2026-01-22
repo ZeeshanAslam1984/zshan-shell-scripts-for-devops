@@ -292,3 +292,83 @@ done
 formatted using the black formatter before committing. 
 ● Use: Ensures that code follows formatting standards before it is committed 
 to the Git repository
+
+31. Auto-Deploy to Kubernetes (using kubectl) 
+Script: 
+#!/bin/bash 
+# Define deployment variables 
+DEPLOYMENT="myapp-deployment" 
+NAMESPACE="default" 
+IMAGE="myrepo/myapp:latest" 
+# Deploy the new image to Kubernetes 
+kubectl set image deployment/$DEPLOYMENT myapp=$IMAGE -n 
+$NAMESPACE 
+kubectl rollout status deployment/$DEPLOYMENT -n $NAMESPACE 
+Explanation: 
+● kubectl: This is the command-line tool used to interact with Kubernetes 
+clusters. 
+● set image: This updates the image in the deployment to the new version. 
+● rollout status: This ensures the new deployment has been successfully 
+rolled out. 
+● New Learner Insight: This script automates the process of deploying a new 
+version of an application to a Kubernetes cluster. 
+
+32. Docker Compose Up and Down 
+Script: 
+#!/bin/bash 
+# Start services 
+docker-compose -f /path/to/docker-compose.yml up -d 
+# Stop services 
+docker-compose -f /path/to/docker-compose.yml down 
+Explanation: 
+● docker-compose: A tool for defining and running multi-container Docker 
+applications. 
+● up -d: This starts the containers in detached mode (background). 
+● down: This stops the containers and removes the network. 
+● New Learner Insight: This script automates the start and stop process of 
+multiple Docker containers defined in a docker-compose.yml file. 
+
+33. Clean Up Docker Volumes 
+Script: 
+#!/bin/bash 
+# List unused volumes 
+docker volume ls -qf dangling=true 
+# Remove all unused volumes 
+docker volume prune -f 
+Explanation: 
+● docker volume ls -qf dangling=true: This lists all volumes that are not 
+currently in use (dangling volumes). 
+● docker volume prune -f: This removes all unused volumes to free up disk 
+space. 
+● New Learner Insight: Docker volumes can take up space if they are not 
+cleaned up. This script helps remove them to save storage. 
+
+34. SSH Key Generator Script 
+Script: 
+#!/bin/bash 
+echo "Generating SSH key for GitHub..." 
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f ~/.ssh/id_rsa -N "" 
+# Show the public key 
+cat ~/.ssh/id_rsa.pub 
+Explanation: 
+● ssh-keygen: This generates a new SSH key pair (public and private keys). 
+● -t rsa -b 4096: This specifies the RSA algorithm with 4096 bits of 
+encryption strength. 
+● -f ~/.ssh/id_rsa: This saves the private key in the specified file path. 
+● New Learner Insight: SSH keys are used for secure communication, such 
+as connecting to servers or GitHub repositories without needing a password. 
+
+35. CloudFormation Stack Status Check (AWS CLI) 
+Script: 
+#!/bin/bash 
+STACK_NAME="my-cloudformation-stack" 
+aws cloudformation describe-stacks --stack-name $STACK_NAME --query 
+"Stacks[0].StackStatus" 
+Explanation: 
+● aws cloudformation describe-stacks: This AWS CLI command retrieves 
+information about CloudFormation stacks. 
+● --query "Stacks[0].StackStatus": This extracts the status of the specified 
+stack. 
+● New Learner Insight: CloudFormation is a service used to automate the 
+setup of AWS resources. This script helps check the status of a stack 
+deployment. 
