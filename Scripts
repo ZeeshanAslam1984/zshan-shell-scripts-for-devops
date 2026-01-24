@@ -372,3 +372,84 @@ stack.
 ● New Learner Insight: CloudFormation is a service used to automate the 
 setup of AWS resources. This script helps check the status of a stack 
 deployment. 
+
+36. Generate a Self-Signed SSL Certificate 
+Script: 
+#!/bin/bash 
+DOMAIN="example.com" 
+CERT_DIR="/etc/ssl/certs" 
+KEY_DIR="/etc/ssl/private" 
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout 
+$KEY_DIR/$DOMAIN.key -out $CERT_DIR/$DOMAIN.crt 
+Explanation: 
+● openssl req -x509: This generates a self-signed SSL certificate. 
+● -newkey rsa:2048: This creates a new RSA key with 2048 bits. 
+● -keyout and -out: These specify the file paths to save the private key and 
+certificate. 
+● New Learner Insight: SSL certificates are essential for securing 
+communication over the internet. This script helps generate a self-signed 
+certificate for testing purposes. 
+
+37. Backup MySQL Database 
+Script: 
+#!/bin/bash 
+DB_NAME="mydatabase" 
+USER="root" 
+PASSWORD="password" 
+BACKUP_DIR="/backups" 
+# Backup MySQL database 
+mysqldump -u $USER -p$PASSWORD $DB_NAME > 
+$BACKUP_DIR/$DB_NAME_$(date +%F).sql 
+Explanation: 
+● mysqldump: This command creates a backup of a MySQL database. 
+● -u: Specifies the MySQL user. 
+● $(date +%F): This appends the current date to the backup file for 
+versioning. 
+● New Learner Insight: Regular backups are essential for data safety. This 
+script automates the process of backing up a MySQL database. 
+
+38. Update System Packages (for Ubuntu/Debian) 
+Script: 
+#!/bin/bash 
+echo "Updating system packages..." 
+# Update apt repositories and upgrade packages 
+sudo apt update -y && sudo apt upgrade -y 
+# Clean up unused packages 
+sudo apt autoremove -y 
+Explanation: 
+● sudo apt update -y: This updates the package index, checking for available 
+updates. 
+● sudo apt upgrade -y: This upgrades installed packages to their latest 
+versions. 
+● New Learner Insight: Keeping system packages up to date is crucial for 
+security and performance. This script automates system maintenance tasks. 
+
+39. Monitor Memory Usage and Trigger Alert 
+Script: 
+#!/bin/bash 
+THRESHOLD=90 
+MEMORY_USAGE=$(free | grep Mem | awk '{print $3/$2 * 100.0}') 
+if (( $(echo "$MEMORY_USAGE > $THRESHOLD" | bc -l) )); then 
+echo "Memory usage is high: $MEMORY_USAGE%" | mail -s "Alert: High 
+Memory Usage" admin@example.com 
+fi 
+Explanation: 
+● free: Displays memory usage statistics. 
+● awk '{print $3/$2 * 100.0}': Calculates the percentage of used memory. 
+● bc -l: This command-line calculator is used for floating-point comparison. 
+● New Learner Insight: This script monitors memory usage on a system and 
+sends an email alert if usage exceeds a specified threshold. 
+
+40. Automated Version Bumping for NPM Projects 
+Script: 
+#!/bin/bash 
+# Increment version using npm 
+npm version patch 
+# Push changes to Git and GitHub 
+git push origin main 
+git push origin --tags 
+Explanation: 
+● npm version patch: This increments the patch version in package.json. 
+● git push origin main: This pushes the changes to the remote repository. 
+● New Learner Insight: This script automates the process of versioning a 
+Node.js project and pushing the new version to GitHub
