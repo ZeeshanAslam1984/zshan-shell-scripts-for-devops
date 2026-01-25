@@ -453,3 +453,91 @@ Explanation:
 ● git push origin main: This pushes the changes to the remote repository. 
 ● New Learner Insight: This script automates the process of versioning a 
 Node.js project and pushing the new version to GitHub
+
+41. Check Disk Usage and Send Alert 
+Script: 
+#!/bin/bash 
+THRESHOLD=85 
+DISK_USAGE=$(df / | grep / | awk '{ print $5 }' | sed 's/%//g') 
+if [ $DISK_USAGE -gt $THRESHOLD ]; then 
+echo "Disk usage is over threshold: $DISK_USAGE%" | mail -s "Disk Usage 
+Alert" admin@example.com 
+fi 
+Explanation: 
+● df /: Displays disk usage of the root file system. 
+● awk '{ print $5 }': Extracts the percentage of disk space used. 
+● sed 's/%//g': Removes the percentage sign. 
+● New Learner Insight: This script monitors disk usage and sends an email 
+alert if usage exceeds a specified threshold. 
+
+42. Automatically Sync Local Repository to Remote (Git) 
+Script: 
+#!/bin/bash 
+# Navigate to the local repository directory 
+cd /path/to/repository 
+# Pull the latest changes 
+git pull origin main 
+# Add new changes to git 
+git add . 
+# Commit the changes 
+git commit -m "Automated commit" 
+# Push the changes to the remote repository 
+git push origin main 
+Explanation: 
+● git pull origin main: This fetches and integrates the latest changes from the 
+remote repository. 
+● git add .: This stages all modified files for committing. 
+● git commit -m "Automated commit": This commits the changes with a 
+message. 
+● git push origin main: This pushes the changes to the main branch on the 
+remote repository. 
+● New Learner Insight: This script automates the process of syncing changes 
+between a local and a remote Git repository. 
+
+43. Clean Up Old Docker Containers 
+Script: 
+#!/bin/bash 
+# List all containers (including stopped ones) and remove them 
+docker ps -a -q | xargs docker rm -f 
+Explanation: 
+● docker ps -a -q: This lists all containers, including those that are stopped. 
+● xargs docker rm -f: This removes each container listed by the docker ps 
+command. 
+● New Learner Insight: Docker containers can accumulate over time, taking 
+up unnecessary space. This script removes all containers to clean up the 
+system. 
+
+44. Backup PostgreSQL Database 
+Script: 
+#!/bin/bash 
+# Define database credentials and backup location 
+DB_NAME="mydb" 
+USER="postgres" 
+BACKUP_DIR="/backups" 
+DATE=$(date +%F) 
+# Dump the PostgreSQL database 
+pg_dump -U $USER $DB_NAME > $BACKUP_DIR/$DB_NAME-$DATE.sql 
+Explanation: 
+● pg_dump: This command creates a backup of the specified PostgreSQL 
+database. 
+● $DATE: The current date is added to the backup filename for versioning. 
+● New Learner Insight: Regular database backups are critical. This script 
+automates the process of backing up a PostgreSQL database. 
+
+45. Monitor System Load and Send Alerts 
+Script: 
+#!/bin/bash 
+THRESHOLD=80 
+LOAD=$(uptime | awk -F'load average: ' '{ print $2 }' | cut -d, -f1 | tr -d ' ') 
+if (( $(echo "$LOAD > $THRESHOLD" | bc -l) )); then 
+echo "High system load: $LOAD" | mail -s "Alert: High System Load" 
+admin@example.com 
+fi 
+Explanation: 
+● uptime: This command shows how long the system has been running and 
+the system load averages. 
+● awk -F'load average: ': Extracts the load average from the output. 
+● cut -d, -f1: Gets the 1-minute load average. 
+● New Learner Insight: System load refers to the amount of computational 
+work the system is performing. This script helps monitor load and send an 
+alert if it exceeds a certain threshold
