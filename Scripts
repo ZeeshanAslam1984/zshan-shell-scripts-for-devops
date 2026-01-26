@@ -541,3 +541,91 @@ the system load averages.
 ● New Learner Insight: System load refers to the amount of computational 
 work the system is performing. This script helps monitor load and send an 
 alert if it exceeds a certain threshold
+
+46. Set Up Cron Job for Regular Tasks 
+Script: 
+#!/bin/bash 
+# Add a cron job to run the backup script every day at 2 AM 
+echo "0 2 * * * /path/to/backup.sh" | crontab - 
+Explanation: 
+● crontab -: This sets the cron job for the current user. 
+● 0 2 * * *: This specifies the time and frequency (2 AM every day). 
+● New Learner Insight: A cron job is a scheduled task that automatically 
+runs at specified intervals. This script adds a cron job to back up data at 2 
+AM daily. 
+
+47. Create and Configure New User on Linux 
+Script: 
+#!/bin/bash 
+# Define username and password 
+USER_NAME="newuser" 
+USER_PASSWORD="password123" 
+# Create the user 
+sudo useradd $USER_NAME 
+# Set the password for the new user 
+echo "$USER_NAME:$USER_PASSWORD" | sudo chpasswd 
+# Add user to sudo group 
+sudo usermod -aG sudo $USER_NAME 
+Explanation: 
+● useradd: This creates a new user. 
+● chpasswd: This sets the password for the new user. 
+● usermod -aG sudo: This adds the new user to the sudo group, granting 
+administrative privileges. 
+● New Learner Insight: Automating user creation and management is 
+common in system administration. This script sets up a user with sudo 
+privileges. 
+
+48. Check for Security Updates and Apply Them 
+Script: 
+#!/bin/bash 
+# Update package lists 
+sudo apt update 
+# Install security updates 
+sudo apt upgrade -y 
+# Clean up unneeded packages 
+sudo apt autoremove -y 
+Explanation: 
+● sudo apt update: Updates the list of available packages and their versions. 
+● sudo apt upgrade -y: Upgrades the system, installing security patches and 
+other updates. 
+● sudo apt autoremove -y: Removes any unnecessary packages that were 
+installed as dependencies. 
+● New Learner Insight: Security updates are essential to protect systems. 
+This script ensures the system is up-to-date and free of unneeded packages. 
+
+49. Monitor Disk Usage and Alert on Threshold 
+Script: 
+#!/bin/bash 
+THRESHOLD=90 
+DISK_USAGE=$(df / | grep / | awk '{ print $5 }' | sed 's/%//g') 
+if [ $DISK_USAGE -gt $THRESHOLD ]; then 
+echo "Disk usage is over threshold: $DISK_USAGE%" | mail -s "Disk Usage 
+Alert" admin@example.com 
+fi 
+Explanation: 
+● df /: Shows disk space usage for the root file system. 
+● awk '{ print $5 }': Extracts the disk usage percentage. 
+● sed 's/%//g': Removes the % sign from the output. 
+● New Learner Insight: Monitoring disk space helps avoid running out of 
+space, which can cause system issues. This script sends an alert if the disk 
+usage exceeds a threshold. 
+
+50. Rotate and Backup Logs 
+Script: 
+#!/bin/bash 
+# Define the log file 
+LOG_FILE="/var/log/myapp.log" 
+# Rotate log files (move to a new file with timestamp) 
+mv $LOG_FILE $LOG_FILE.$(date +%F) 
+# Create a new log file 
+touch $LOG_FILE 
+# Compress old log files 
+gzip $LOG_FILE.$(date +%F) 
+Explanation: 
+● mv $LOG_FILE $LOG_FILE.$(date +%F): Renames the current log file 
+by appending the current date to its name. 
+● touch $LOG_FILE: Creates a new log file. 
+● gzip: Compresses the old log file to save disk space. 
+● New Learner Insight: Log rotation helps keep system logs manageable and 
+prevents them from growing too large. This script automatically rotates, 
+backs up, and compresses log files
