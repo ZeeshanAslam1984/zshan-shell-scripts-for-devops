@@ -629,3 +629,103 @@ by appending the current date to its name.
 ● New Learner Insight: Log rotation helps keep system logs manageable and 
 prevents them from growing too large. This script automatically rotates, 
 backs up, and compresses log files
+
+51. Monitor System CPU Usage and Alert 
+Script: 
+#!/bin/bash 
+THRESHOLD=85 
+CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk 
+'{print 100 - $1}') 
+if [ $(echo "$CPU_USAGE > $THRESHOLD" | bc) -eq 1 ]; then 
+echo "High CPU usage detected: $CPU_USAGE%" | mail -s "CPU Usage Alert" 
+admin@example.com 
+fi 
+Explanation: 
+● top -bn1: Runs top in batch mode to get a one-time output. 
+● grep "Cpu(s)": Extracts the CPU usage information. 
+● awk '{print 100 - $1}': Calculates the CPU usage by subtracting the idle 
+percentage from 100%. 
+
+52. Auto-deploy Application with Git Pull and Restart Service 
+Script: 
+#!/bin/bash 
+# Define the application directory and service name 
+APP_DIR="/path/to/app" 
+SERVICE_NAME="myapp.service" 
+# Navigate to the application directory 
+cd $APP_DIR 
+# Pull the latest changes from Git repository 
+git pull origin main 
+# Restart the application service 
+sudo systemctl restart $SERVICE_NAME 
+# Print a success message 
+echo "Application deployed and service restarted." 
+Explanation: 
+● git pull origin main: Fetches the latest changes from the main branch of the 
+Git repository. 
+● systemctl restart $SERVICE_NAME: Restarts the specified service, 
+ensuring the application runs with the latest code. 
+● New Learner Insight: This script automates the process of deploying 
+updated code by pulling from the repository and restarting the application 
+service. 
+
+53. Monitor Memory Usage and Send Alert 
+Script: 
+#!/bin/bash 
+# Define the threshold for memory usage 
+THRESHOLD=90 
+MEMORY_USAGE=$(free | grep Mem | awk '{print $3/$2 * 100.0}') 
+if (( $(echo "$MEMORY_USAGE > $THRESHOLD" | bc -l) )); then 
+echo "Memory usage is over threshold: $MEMORY_USAGE%" | mail -s 
+"Memory Usage Alert" admin@example.com 
+fi 
+Explanation: 
+● free: Shows the memory usage of the system. 
+● awk '{print $3/$2 * 100.0}': Calculates the percentage of memory being 
+used. 
+● bc -l: Performs the comparison to check if memory usage exceeds the 
+threshold. 
+● New Learner Insight: Memory usage monitoring is important to prevent 
+the system from running out of memory, which could cause applications to 
+crash. This script sends an email alert if memory usage exceeds the set 
+threshold. 
+
+54. Backup MySQL Database 
+Script: 
+#!/bin/bash 
+# Define MySQL credentials and backup location 
+DB_NAME="mydb" 
+USER="root" 
+PASSWORD="password" 
+BACKUP_DIR="/path/to/backups" 
+DATE=$(date +%F) 
+# Backup MySQL database 
+mysqldump -u $USER -p$PASSWORD $DB_NAME > 
+$BACKUP_DIR/$DB_NAME-$DATE.sql 
+# Print a success message 
+echo "Backup completed successfully!" 
+Explanation: 
+● mysqldump: This command creates a backup of a MySQL database. 
+● $BACKUP_DIR/$DB_NAME-$DATE.sql: The backup file is saved with 
+the database name and the current date. 
+● New Learner Insight: Backing up databases is crucial for data recovery. 
+This script automates MySQL database backups. 
+
+55. Clean Up Old Log Files 
+Script: 
+#!/bin/bash 
+# Define the log directory and number of days to retain logs 
+LOG_DIR="/var/log/myapp" 
+DAYS_TO_KEEP=30 
+# Find and delete log files older than the specified number of days 
+find $LOG_DIR -type f -name "*.log" -mtime +$DAYS_TO_KEEP -exec rm -f {} 
+\; 
+# Print a success message 
+echo "Old log files deleted." 
+Explanation: 
+● find $LOG_DIR -type f -name "*.log" -mtime +$DAYS_TO_KEEP: 
+Finds log files older than the specified number of days. 
+● -exec rm -f {}: Deletes each found file. 
+● New Learner Insight: Log files can accumulate and take up disk space. 
+This script helps clean up old log files by deleting those that are older than a 
+specified number of days
