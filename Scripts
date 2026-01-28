@@ -729,3 +729,127 @@ Finds log files older than the specified number of days.
 ● New Learner Insight: Log files can accumulate and take up disk space. 
 This script helps clean up old log files by deleting those that are older than a 
 specified number of days
+
+56. Deploy Docker Containers Automatically 
+Script: 
+#!/bin/bash 
+# Define Docker image and container name 
+DOCKER_IMAGE="myapp:latest" 
+CONTAINER_NAME="myapp_container" 
+# Stop the existing container if it's running 
+docker stop $CONTAINER_NAME 
+# Remove the existing container 
+docker rm $CONTAINER_NAME 
+# Run the new container with the latest image 
+docker run -d --name $CONTAINER_NAME $DOCKER_IMAGE 
+# Print a success message 
+echo "Docker container deployed successfully." 
+Explanation: 
+● docker stop $CONTAINER_NAME: Stops the running container. 
+● docker rm $CONTAINER_NAME: Removes the container to prepare for 
+the new one. 
+● docker run -d --name $CONTAINER_NAME $DOCKER_IMAGE: 
+Runs the container in detached mode using the specified Docker image. 
+● New Learner Insight: This script automates the process of stopping, 
+removing, and redeploying a Docker container, ensuring you always have 
+the latest version of your application. 
+
+57. Auto-Rotate SSL Certificates (for Nginx) 
+Script: 
+#!/bin/bash 
+# Define the location of the SSL certificate and private key 
+CERT_FILE="/etc/ssl/certs/myapp.crt" 
+KEY_FILE="/etc/ssl/private/myapp.key" 
+NGINX_CONF="/etc/nginx/nginx.conf" 
+# Check if certificate is about to expire (within 30 days) 
+EXPIRY_DATE=$(openssl x509 -enddate -noout -in $CERT_FILE | sed 
+"s/^.*=\(.*\)$/\1/") 
+EXPIRY_DATE_SECONDS=$(date --date="$EXPIRY_DATE" +%s) 
+CURRENT_DATE_SECONDS=$(date +%s) 
+DAYS_LEFT=$((($EXPIRY_DATE_SECONDS - 
+$CURRENT_DATE_SECONDS) / 86400)) 
+if [ $DAYS_LEFT -lt 30 ]; then 
+# Reload Nginx configuration to apply new certificate 
+sudo systemctl reload nginx 
+echo "SSL certificate renewed and Nginx reloaded." 
+else 
+echo "No certificate renewal needed. Expiry in $DAYS_LEFT days." 
+fi 
+Explanation: 
+● openssl x509 -enddate: Extracts the expiry date of the SSL certificate. 
+● date --date="$EXPIRY_DATE" +%s: Converts the expiry date to seconds 
+for comparison. 
+● systemctl reload nginx: Reloads the Nginx service to apply the new 
+certificate if needed. 
+● New Learner Insight: Regular SSL certificate renewal ensures secure 
+communication. This script checks for certificates that are about to expire 
+and reloads the web server with the new certificate. 
+
+58. Sync Files Between Servers Using Rsync 
+Script: 
+#!/bin/bash 
+# Define source and destination directories 
+SOURCE_DIR="/path/to/source" 
+DEST_DIR="user@remote_server:/path/to/destination" 
+# Use rsync to sync files 
+rsync -avz --delete $SOURCE_DIR $DEST_DIR 
+# Print a success message 
+echo "Files synced successfully." 
+Explanation: 
+● rsync -avz: The rsync command synchronizes files and directories between 
+local and remote servers. The -a option preserves attributes, -v is for 
+verbosity, and -z compresses data during transfer. 
+● --delete: Deletes files in the destination directory that are no longer in the 
+source directory. 
+● New Learner Insight: rsync is a powerful tool for syncing files. This script 
+automates file transfer between two servers, ensuring they are in sync. 
+
+59. Automatically Generate System Health Report 
+Script: 
+#!/bin/bash 
+# Define the output file for the health report 
+REPORT_FILE="/path/to/health_report.txt" 
+# Get system uptime 
+echo "Uptime:" >> $REPORT_FILE 
+uptime >> $REPORT_FILE 
+# Get disk usage 
+echo "Disk Usage:" >> $REPORT_FILE 
+df -h >> $REPORT_FILE 
+# Get memory usage 
+echo "Memory Usage:" >> $REPORT_FILE 
+free -h >> $REPORT_FILE 
+# Get CPU load 
+echo "CPU Load:" >> $REPORT_FILE 
+top -bn1 | grep "Cpu(s)" >> $REPORT_FILE 
+# Print a success message 
+echo "System health report generated." 
+Explanation: 
+● uptime: Displays how long the system has been running. 
+● df -h: Shows disk space usage in a human-readable format. 
+● free -h: Shows memory usage in a human-readable format. 
+● top -bn1: Provides a snapshot of the system's CPU usage. 
+● New Learner Insight: This script collects key system metrics and writes 
+them into a health report, which can be used to monitor system health over 
+time. 
+
+60. Automatically Scale Web Server (Example with Apache) 
+Script: 
+#!/bin/bash 
+# Define server health URL and threshold for scaling 
+HEALTH_CHECK_URL="http://localhost/health" 
+THRESHOLD=5 
+CURRENT_LOAD=$(curl -s $HEALTH_CHECK_URL) 
+if [ $CURRENT_LOAD -ge $THRESHOLD ]; then 
+# Scale up the web server by adding a new instance 
+echo "Scaling up the web server..." 
+# Command to scale web server (e.g., launch a new instance) 
+# Example: aws ec2 run-instances --image-id ami-xxxx --count 1 --instance-type 
+t2.micro 
+else 
+echo "Load is below threshold. No scaling needed." 
+fi 
+Explanation: 
+● curl -s $HEALTH_CHECK_URL: Fetches the health check data from a 
+web server. 
+● aws ec2 run-instances: (Commented out) A command that could be used to 
+scale up an AWS EC2 instance if the load exceeds a threshold
