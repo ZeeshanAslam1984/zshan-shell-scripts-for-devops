@@ -3,10 +3,10 @@
 sudo apt update && sudo apt install -y nginx 
 Purpose: Updates system package info and installs NGINX web server. 
 
-2. Monitor Disk Usage 
+ 2. Monitor Disk Usage 
 #!/bin/bash 
 df -h > disk_usage_report.txt 
-Purpose: Saves disk space usage to a file for review later. 
+Purpose: Saves disk space usage to a file for review later.
 
 3. Backup Files 
 #!/bin/bash 
