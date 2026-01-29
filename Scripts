@@ -853,3 +853,101 @@ Explanation:
 web server. 
 ● aws ec2 run-instances: (Commented out) A command that could be used to 
 scale up an AWS EC2 instance if the load exceeds a threshold
+
+61. Automated Database Migration Script 
+Script: 
+#!/bin/bash 
+# Define the database credentials and migration directory 
+DB_USER="dbuser" 
+DB_PASS="dbpass" 
+DB_NAME="dbname" 
+MIGRATION_DIR="/path/to/migrations" 
+# Run database migrations 
+cd $MIGRATION_DIR 
+for migration in *.sql; do 
+echo "Applying migration: $migration" 
+mysql -u $DB_USER -p$DB_PASS $DB_NAME < $migration 
+done 
+# Print a success message 
+echo "All migrations applied successfully." 
+Explanation: 
+● mysql -u $DB_USER -p$DB_PASS $DB_NAME: Executes each 
+migration SQL script against the specified MySQL database. 
+● New Learner Insight: This script automates the process of running database 
+migrations, which is a common task in deployment pipelines to ensure the 
+database schema is up-to-date. 
+
+62. Clean Up Docker Images 
+Script: 
+#!/bin/bash 
+# Remove unused Docker images 
+docker image prune -f 
+# Remove all stopped containers 
+docker container prune -f 
+# Remove dangling volumes 
+docker volume prune -f 
+# Print a success message 
+echo "Docker cleanup completed successfully." 
+Explanation: 
+● docker image prune -f: Removes unused Docker images to free up disk 
+space. 
+● docker container prune -f: Removes stopped containers. 
+● docker volume prune -f: Removes unused Docker volumes. 
+● New Learner Insight: Regular cleanup of Docker resources helps maintain 
+system performance and free up disk space by removing unnecessary 
+images, containers, and volumes. 
+
+63. Monitor Disk Space Usage and Send Alert 
+Script: 
+#!/bin/bash 
+# Set the disk usage threshold (in percentage) 
+THRESHOLD=80 
+DISK_USAGE=$(df / | grep / | awk '{ print $5 }' | sed 's/%//g') 
+if [ $DISK_USAGE -gt $THRESHOLD ]; then 
+echo "Disk space usage is over threshold: $DISK_USAGE%" | mail -s "Disk 
+Space Alert" admin@example.com 
+fi 
+Explanation: 
+● df /: Displays the disk usage statistics for the root directory. 
+● awk '{ print $5 }': Extracts the percentage of disk space used. 
+● sed 's/%//g': Removes the percentage symbol for easier comparison. 
+● New Learner Insight: Disk space monitoring is crucial in production 
+environments to avoid downtime or performance issues. This script sends an 
+alert when the disk space usage exceeds the set threshold. 
+
+64. Generate SSH Key Pair for Deployment 
+Script: 
+#!/bin/bash 
+# Define the location for the SSH key 
+KEY_PATH="$HOME/.ssh/deploy_key" 
+# Generate a new SSH key pair 
+ssh-keygen -t rsa -b 4096 -f $KEY_PATH -N "" 
+# Output the public key for deployment 
+cat $KEY_PATH.pub 
+# Print a success message 
+echo "SSH key pair generated successfully." 
+Explanation: 
+● ssh-keygen -t rsa -b 4096: Generates an RSA SSH key pair with a 4096-bit 
+key. 
+● -f $KEY_PATH: Specifies the file path where the SSH key pair will be 
+stored. 
+● New Learner Insight: SSH keys are used for secure authentication, 
+especially in deployment scenarios. This script automates the creation of an 
+SSH key pair for use in secure connections to remote servers. 
+
+65. Backup Files to AWS S3 Bucket 
+Script: 
+#!/bin/bash 
+# Define the source directory and S3 bucket 
+SOURCE_DIR="/path/to/files" 
+S3_BUCKET="s3://my-bucket/backup" 
+# Sync files to the S3 bucket 
+aws s3 sync $SOURCE_DIR $S3_BUCKET --delete 
+# Print a success message 
+echo "Backup to S3 completed successfully." 
+Explanation: 
+● aws s3 sync: Syncs files from the local directory to the specified S3 bucket. 
+The --delete flag removes files from S3 that no longer exist locally. 
+● New Learner Insight: This script automates the backup of files to AWS S3, 
+which is a commonly used cloud storage solution. Syncing ensures that the 
+backup is up-to-date with the local directory
