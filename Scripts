@@ -951,3 +951,101 @@ The --delete flag removes files from S3 that no longer exist locally.
 ● New Learner Insight: This script automates the backup of files to AWS S3, 
 which is a commonly used cloud storage solution. Syncing ensures that the 
 backup is up-to-date with the local directory
+
+66. Monitor and Restart a Service if Down 
+Script: 
+#!/bin/bash 
+# Define the service name 
+SERVICE_NAME="nginx" 
+# Check if the service is running 
+if ! systemctl is-active --quiet $SERVICE_NAME; then 
+echo "$SERVICE_NAME is not running. Restarting the service..." 
+systemctl restart $SERVICE_NAME 
+else 
+echo "$SERVICE_NAME is running." 
+fi 
+Explanation: 
+● systemctl is-active --quiet $SERVICE_NAME: Checks if the service is 
+active (running). 
+● systemctl restart $SERVICE_NAME: Restarts the service if it is found to 
+be inactive. 
+● New Learner Insight: This script automates the monitoring and recovery of 
+services. If a service stops unexpectedly, it will automatically be restarted to 
+maintain system availability. 
+
+67. Automate Deployment to AWS EC2 Instance 
+Script: 
+#!/bin/bash 
+# Define the AWS EC2 instance ID and the application directory 
+INSTANCE_ID="i-xxxxxxxxxxxxx" 
+APP_DIR="/path/to/app" 
+# SSH into the EC2 instance and deploy the application 
+ssh -i "your-key.pem" ec2-user@ec2-xx-xxx-xxx-xx.compute-1.amazonaws.com 
+<< EOF 
+cd $APP_DIR 
+git pull origin main 
+sudo systemctl restart myapp.service 
+exit 
+EOF 
+# Print a success message 
+echo "Deployment completed successfully." 
+Explanation: 
+● ssh -i "your-key.pem": SSH into the EC2 instance using the private key for 
+authentication. 
+● git pull origin main: Pulls the latest code from the Git repository. 
+● sudo systemctl restart myapp.service: Restarts the application service on 
+the EC2 instance. 
+
+68. Set Up Cron Jobs for Regular Tasks 
+Script: 
+#!/bin/bash 
+# Define the cron job schedule and command to run 
+CRON_SCHEDULE="0 3 * * *" 
+COMMAND="/path/to/backup_script.sh" 
+# Add the cron job 
+(crontab -l; echo "$CRON_SCHEDULE $COMMAND") | crontab - 
+# Print a success message 
+echo "Cron job added successfully." 
+Explanation: 
+● crontab -l: Lists existing cron jobs. 
+● echo "$CRON_SCHEDULE $COMMAND": Adds a new cron job with 
+the specified schedule and command to be executed. 
+● New Learner Insight: Cron jobs automate tasks to be executed at scheduled 
+intervals. This script adds a cron job to run a backup script daily at 3:00 AM. 
+
+69. Automatically Install Software Packages 
+Script: 
+#!/bin/bash 
+# Define the list of software packages to install 
+PACKAGES=("git" "docker.io" "nginx") 
+# Install each package 
+for PACKAGE in "${PACKAGES[@]}"; do 
+if ! dpkg -l | grep -q "$PACKAGE"; then 
+sudo apt-get install -y $PACKAGE 
+echo "$PACKAGE installed successfully." 
+else 
+echo "$PACKAGE is already installed." 
+fi 
+done 
+Explanation: 
+● dpkg -l: Lists installed packages on a Debian-based system. 
+● apt-get install -y: Installs the package if it's not already installed. 
+● New Learner Insight: This script automates the installation of necessary 
+software packages. It checks whether each package is already installed and 
+installs it if necessary. 
+
+70. Schedule System Reboot 
+Script: 
+#!/bin/bash 
+# Define the reboot schedule (e.g., at midnight) 
+REBOOT_TIME="00:00" 
+# Schedule a reboot using cron 
+echo "$REBOOT_TIME root /sbin/bashreboot" | sudo tee -a /etc/crontab 
+# Print a success message 
+echo "System reboot scheduled for $REBOOT_TIME." 
+Explanation: 
+● echo "$REBOOT_TIME root /sbin/bashreboot" | sudo tee -a 
+/etc/crontab: Adds a cron job to reboot the system at the specified time. 
+● New Learner Insight: This script helps automate the scheduling of system 
+reboots. Reboots are important for applying updates or maintaining system 
+performance
