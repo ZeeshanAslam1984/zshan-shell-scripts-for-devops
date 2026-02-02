@@ -1049,3 +1049,129 @@ Explanation:
 ● New Learner Insight: This script helps automate the scheduling of system 
 reboots. Reboots are important for applying updates or maintaining system 
 performance
+
+71. Auto-Scale EC2 Instances Based on CPU Utilization 
+Script: 
+#!/bin/bash 
+# Define the CPU utilization threshold and Auto Scaling group name 
+CPU_THRESHOLD=80 
+AUTO_SCALING_GROUP="my-auto-scaling-group" 
+# Get the current CPU utilization of EC2 instances in the Auto Scaling group 
+CPU_UTILIZATION=$(aws cloudwatch get-metric-statistics --metric-name 
+CPUUtilization --start-time $(date -u -d '5 minutes ago' 
++"%Y-%m-%dT%H:%M:%SZ") --end-time $(date -u 
++"%Y-%m-%dT%H:%M:%SZ") --period 300 --namespace AWS/EC2 --statistics 
+Average --dimensions 
+Name=AutoScalingGroupName,Value=$AUTO_SCALING_GROUP --query 
+'Datapoints[0].Average' --output text) 
+# Check if CPU utilization exceeds threshold 
+if (( $(echo "$CPU_UTILIZATION > $CPU_THRESHOLD" | bc -l) )); then 
+# Scale up EC2 instances 
+aws autoscaling update-auto-scaling-group --auto-scaling-group-name 
+$AUTO_SCALING_GROUP --desired-capacity $(($CURRENT_CAPACITY + 
+1)) 
+echo "CPU utilization is high. Scaling up the Auto Scaling group." 
+else 
+echo "CPU utilization is within acceptable limits." 
+fi 
+Explanation: 
+● aws cloudwatch get-metric-statistics: Retrieves CPU utilization statistics 
+for the Auto Scaling group. 
+● aws autoscaling update-auto-scaling-group: Scales the group up when 
+CPU utilization exceeds the threshold. 
+● New Learner Insight: This script automates scaling EC2 instances based on 
+CPU utilization, which is useful for maintaining application performance. 
+
+72. Create Backup of Configuration Files 
+Script: 
+#!/bin/bash 
+# Define source and destination directories for the backup 
+SOURCE_DIR="/etc/myapp" 
+BACKUP_DIR="/backups/myapp/$(date +'%Y-%m-%d')" 
+# Create the backup directory if it doesn't exist 
+mkdir -p $BACKUP_DIR 
+# Copy configuration files to the backup directory 
+cp -r $SOURCE_DIR/* $BACKUP_DIR/ 
+# Print a success message 
+echo "Backup of configuration files completed successfully." 
+Explanation: 
+● mkdir -p $BACKUP_DIR: Creates a backup directory with the current 
+date. 
+● cp -r $SOURCE_DIR/* $BACKUP_DIR/: Copies all files from the source 
+to the backup directory. 
+● New Learner Insight: Automating backups ensures important configuration 
+files are safely stored, which is critical in case of system failure or when 
+restoring environments. 
+
+73. Monitor System Load and Send Email Alert 
+Script: 
+#!/bin/bash 
+# Define the system load threshold 
+LOAD_THRESHOLD=5.0 
+# Get the current system load (1-minute average) 
+CURRENT_LOAD=$(uptime | awk '{print $10}' | sed 's/,//') 
+# Check if the load exceeds the threshold 
+if (( $(echo "$CURRENT_LOAD > $LOAD_THRESHOLD" | bc -l) )); then 
+echo "System load is high: $CURRENT_LOAD" | mail -s "System Load Alert" 
+admin@example.com 
+echo "Load is above the threshold. Alert sent." 
+else 
+echo "System load is normal: $CURRENT_LOAD" 
+fi 
+Explanation: 
+● uptime: Retrieves the system load information. 
+● echo "$CURRENT_LOAD > $LOAD_THRESHOLD" | bc -l: Compares 
+the current load to the defined threshold. 
+● mail -s "System Load Alert": Sends an email alert if the load is high. 
+● New Learner Insight: Monitoring system load is critical for detecting 
+potential issues before they impact performance, and this script automates 
+that process. 
+
+74. Automate Docker Container Build and Push to Docker Hub 
+Script: 
+#!/bin/bash 
+# Define Docker image name and tag 
+IMAGE_NAME="myapp" 
+IMAGE_TAG="latest" 
+# Build the Docker image 
+docker build -t $IMAGE_NAME:$IMAGE_TAG . 
+# Log in to Docker Hub 
+echo "$DOCKER_PASSWORD" | docker login --username 
+$DOCKER_USERNAME --password-stdin 
+# Push the Docker image to Docker Hub 
+docker push $IMAGE_NAME:$IMAGE_TAG 
+# Print a success message 
+echo "Docker image $IMAGE_NAME:$IMAGE_TAG pushed to Docker Hub 
+successfully." 
+Explanation: 
+● docker build -t $IMAGE_NAME:$IMAGE_TAG .: Builds a Docker 
+image with the specified name and tag. 
+● docker login: Logs into Docker Hub using credentials. 
+● docker push: Pushes the image to Docker Hub for use in deployments. 
+● New Learner Insight: Automating Docker image builds and pushing to a 
+registry simplifies deployment workflows and version control for 
+applications. 
+
+75. Monitor Disk Space and Alert If Below Threshold 
+Script: 
+#!/bin/bash 
+# Set disk space threshold (in percentage) 
+DISK_THRESHOLD=90 
+# Get the current disk usage of the root filesystem 
+DISK_USAGE=$(df / | grep / | awk '{print $5}' | sed 's/%//') 
+# Check if the disk usage exceeds the threshold 
+if [ $DISK_USAGE -gt $DISK_THRESHOLD ]; then 
+echo "Warning: Disk space usage is over $DISK_THRESHOLD%. Current 
+usage: $DISK_USAGE%" | mail -s "Disk Space Alert" admin@example.com 
+echo "Disk space usage is high. Alert sent." 
+else 
+echo "Disk space usage is normal: $DISK_USAGE%" 
+fi 
+Explanation: 
+● df /: Shows the disk usage for the root filesystem. 
+● awk '{print $5}': Extracts the percentage of disk usage. 
+● mail -s "Disk Space Alert": Sends an email alert if the disk usage exceeds 
+the threshold. 
+● New Learner Insight: Disk space monitoring is a vital task in system 
+administration. This script ensures that admins are alerted when disk usage 
+becomes critical
