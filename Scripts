@@ -1175,3 +1175,153 @@ the threshold.
 ● New Learner Insight: Disk space monitoring is a vital task in system 
 administration. This script ensures that admins are alerted when disk usage 
 becomes critical
+
+�
+�
+200. Automate Application Deployment with Git Pull 
+Script: 
+#!/bin/bash 
+# Define application directory 
+APP_DIR="/var/www/myapp" 
+# Navigate to the application directory 
+cd $APP_DIR 
+# Pull the latest changes from GitHub 
+echo "Pulling latest code from Git repository..." 
+git pull origin main 
+# Restart the application service 
+echo "Restarting application..." 
+sudo systemctl restart myapp.service 
+# Print success message 
+echo "Application updated and restarted." 
+Explanation: 
+● git pull origin main: Pulls the latest changes from the main branch of the 
+repository. 
+● systemctl restart myapp.service: Restarts the service to reflect the new 
+changes. 
+● New Learner Insight: This script is useful for automating code 
+deployments and ensuring the latest version of an application is running. 
+�
+�
+201. Schedule Regular Backup with Cron Job 
+Script: 
+#!/bin/bash 
+# Define backup directory and source 
+SOURCE_DIR="/home/user/data" 
+BACKUP_DIR="/backups/$(date +'%Y%m%d')" 
+# Create backup directory 
+mkdir -p $BACKUP_DIR 
+# Copy files to backup directory 
+cp -r $SOURCE_DIR/* $BACKUP_DIR/ 
+# Print success message 
+echo "Backup completed successfully. Backup stored in $BACKUP_DIR." 
+Explanation: 
+● mkdir -p: Creates the backup directory with the current date in its name. 
+● cp -r: Copies all files from the source directory to the backup directory. 
+● New Learner Insight: Backups are crucial for disaster recovery. This script 
+ensures data is backed up regularly by scheduling it through a cron job. 
+�
+�
+202. Automate SSL Certificate Renewal for Multiple Domains 
+Script: 
+#!/bin/bash 
+# List of domains 
+DOMAINS=("domain1.com" "domain2.com" "domain3.com") 
+# Renew SSL certificates for each domain 
+for DOMAIN in "${DOMAINS[@]}"; do 
+echo "Renewing SSL certificate for $DOMAIN..." 
+sudo certbot certonly --standalone -d $DOMAIN 
+# Restart web server to apply new certificates 
+echo "Restarting Apache for $DOMAIN..." 
+sudo systemctl restart apache2 
+done 
+# Print success message 
+echo "SSL certificates renewed and web server restarted for all domains." 
+Explanation: 
+● certbot certonly --standalone: Renews SSL certificates using Certbot. 
+● systemctl restart apache2: Restarts the Apache server to load the renewed 
+certificates. 
+● New Learner Insight: This script automates the process of renewing SSL 
+certificates for multiple domains, which is a routine task for maintaining 
+secure connections. 
+�
+�
+203. Check Disk Usage and Send Alert if Full 
+Script: 
+#!/bin/bash 
+# Set disk usage threshold (in percentage) 
+THRESHOLD=90 
+# Get disk usage of root directory 
+DISK_USAGE=$(df / | grep / | awk '{print $5}' | sed 's/%//g') 
+# Check if disk usage exceeds the threshold 
+if [ $DISK_USAGE -ge $THRESHOLD ]; then 
+echo "Warning: Disk usage is ${DISK_USAGE}% on /" | mail -s "Disk Usage 
+Alert" admin@example.com 
+else 
+echo "Disk usage is normal: ${DISK_USAGE}%" 
+fi 
+Explanation: 
+● df /: Displays the disk usage of the root directory. 
+● awk and sed: Extract the percentage of disk usage from the output. 
+● mail: Sends an alert if disk usage exceeds the threshold. 
+● New Learner Insight: This script helps in monitoring disk space usage and 
+sends an alert when it crosses a critical level, preventing unexpected failures 
+due to lack of space. 
+�
+�
+204. Install and Configure Jenkins 
+Script: 
+#!/bin/bash 
+# Update package list 
+echo "Updating package list..." 
+sudo apt update -y 
+# Install dependencies for Jenkins 
+echo "Installing dependencies..." 
+sudo apt install -y openjdk-11-jdk 
+# Add Jenkins repository and key 
+echo "Adding Jenkins repository..." 
+wget -q -O - https://pkg.jenkins.io/jenkins.io.key | sudo tee 
+/usr/share/keyrings/jenkins.asc 
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian/ stable main > 
+/etc/apt/sources.list.d/jenkins.list' 
+# Install Jenkins 
+echo "Installing Jenkins..." 
+sudo apt update -y 
+sudo apt install jenkins -y 
+# Start Jenkins and enable it on boot 
+echo "Starting Jenkins..." 
+sudo systemctl start jenkins 
+sudo systemctl enable jenkins 
+# Print Jenkins status 
+echo "Jenkins installation complete." 
+sudo systemctl status jenkins 
+Explanation: 
+● openjdk-11-jdk: Installs the Java Development Kit required by Jenkins. 
+● wget: Downloads the Jenkins repository key and adds it to the system's list 
+of trusted keys. 
+● systemctl start jenkins: Starts the Jenkins service. 
+● New Learner Insight: Jenkins is a popular automation tool for continuous 
+integration and delivery. This script automates the installation and startup of 
+Jenkins. 
+�
+�
+205. Automate Docker Container Deployment 
+Script: 
+#!/bin/bash 
+# Define Docker image and container name 
+DOCKER_IMAGE="nginx:latest" 
+CONTAINER_NAME="my_nginx_container" 
+# Pull the latest Docker image 
+echo "Pulling latest Docker image $DOCKER_IMAGE..." 
+docker pull $DOCKER_IMAGE 
+# Run the Docker container 
+echo "Running Docker container $CONTAINER_NAME..." 
+docker run -d --name $CONTAINER_NAME -p 80:80 $DOCKER_IMAGE 
+# Print success message 
+echo "Docker container $CONTAINER_NAME deployed successfully." 
+Explanation: 
+● docker pull: Pulls the latest version of the Docker image. 
+● docker run: Runs the Docker container with the specified name and 
+exposed port. 
+● New Learner Insight: Docker containers encapsulate applications and their 
+dependencies, making deployments fast and consistent. This script 
+automates the process of pulling and running a Docker container.
