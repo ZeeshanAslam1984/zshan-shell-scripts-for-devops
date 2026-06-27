@@ -1325,3 +1325,48 @@ exposed port.
 ● New Learner Insight: Docker containers encapsulate applications and their 
 dependencies, making deployments fast and consistent. This script 
 automates the process of pulling and running a Docker container.
+
+
+�
+206. Schedule Cron Job for System Updates 
+Script: 
+#!/bin/bash 
+# Define the log file for updates 
+LOG_FILE="/var/log/system_update.log" 
+# Update the system and log output 
+echo "Starting system update..." | tee -a $LOG_FILE 
+sudo apt update -y | tee -a $LOG_FILE 
+sudo apt upgrade -y | tee -a $LOG_FILE 
+# Print success message 
+echo "System update completed." | tee -a $LOG_FILE 
+Explanation: 
+● tee -a: Appends the output to the specified log file. 
+● apt update and apt upgrade: Updates the system packages to the latest 
+version. 
+● New Learner Insight: Regular system updates are essential for security and 
+stability. This script automates system updates and logs the process for 
+tracking. 
+�
+�
+207. Monitor Website Availability 
+Script: 
+#!/bin/bash 
+# Define website URL 
+WEBSITE="https://www.example.com" 
+# Check if the website is accessible 
+echo "Checking availability of $WEBSITE..." 
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $WEBSITE) 
+# Send alert if the website is down 
+if [ $HTTP_STATUS -ne 200 ]; then 
+echo "Website $WEBSITE is down (HTTP Status: $HTTP_STATUS)" | mail -s 
+"Website Down Alert" admin@example.com 
+else 
+echo "Website $WEBSITE is up and running." 
+fi 
+Explanation: 
+● curl -s -o /dev/null -w "%{http_code}": Sends a request to the website and 
+retrieves the HTTP status code. 
+● mail: Sends an email alert if the website is down. 
+● New Learner Insight: This script checks the availability of a website and 
+sends an alert if it's down, which is essential for uptime monitoring in 
+DevOps environments. 
