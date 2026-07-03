@@ -1370,3 +1370,18 @@ retrieves the HTTP status code.
 ● New Learner Insight: This script checks the availability of a website and 
 sends an alert if it's down, which is essential for uptime monitoring in 
 DevOps environments. 
+
+install Packages 
+#!/bin/bash 
+sudo apt update && sudo apt install -y nginx 
+Purpose: Updates system package info and installs NGINX web server. 
+
+ Monitor Disk Usage 
+#!/bin/bash 
+df -h > disk_usage_report.txt 
+Purpose: Saves disk space usage to a file for review later.
+
+Backup Files 
+#!/bin/bash 
+tar -czf backup_$(date +%F).tar.gz /path/to/directory 
+Purpose: Compresses a directory into a .tar.gz backup file with the current date. 
